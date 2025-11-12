@@ -1,10 +1,154 @@
 <!DOCTYPE html>
-<html lang='pt-BR'>
+<html lang="pt-BR">
 <head>
-  <meta charset='UTF-8'>
-  <title>Coleta Lixo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coleta Lixo — Protótipo MVP</title>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Vue.js via CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 </head>
 <body>
-  <h1>Protótipo Coleta Lixo</h1>
+  <div id="app" class="app-root">
+    <header class="site-header">
+      <div class="container header-inner">
+        <h1 class="brand">Coleta Lixo — Corumbá-MS</h1>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="#nova-solicitacao">Solicitar</a></li>
+            <li><a href="#meus-pedidos">Meus Pedidos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container main-grid">
+      <!-- Formulário -->
+      <section id="nova-solicitacao" class="card">
+        <h2>Nova Solicitação</h2>
+        <form @submit.prevent="criarSolicitacao" class="form">
+          <label for="nome">Nome</label>
+          <input id="nome" v-model="form.nome" required placeholder="Seu nome completo" />
+
+          <label for="endereco">Endereço (ponto de coleta)</label>
+          <input id="endereco" v-model="form.endereco" required placeholder="Rua, número, bairro" />
+
+          <label for="tipo">Tipo de Lixo</label>
+          <select id="tipo" v-model="form.tipo" required>
+            <option disabled value="">Selecione</option>
+            <option>Celular</option>
+            <option>Computador</option>
+            <option>TV</option>
+            <option>Demais eletroeletronicos</option>
+            <option>Demais eletrodomesticos</option>
+          </select>
+
+          <button class="btn primary" type="submit">Enviar Solicitação</button>
+        </form>
+
+        <div class="notice" v-if="mensagem">{{ mensagem }}</div>
+      </section>
+
+      <!-- Pedidos -->
+      <section id="meus-pedidos" class="card">
+        <h2>Meus Pedidos</h2>
+        <table class="requests-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Endereço</th>
+              <th>Tipo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="p in pedidos" :key="p.id">
+              <td>{{ p.id }}</td>
+              <td>{{ p.endereco }}</td>
+              <td>{{ p.tipo }}</td>
+              <td>
+                <span :class="['status', statusClass(p.situacao)]">{{ p.situacao }}</span>
+              </td>
+              <td>
+                <button v-if="mostrarBotaoCancelar(p)" @click="cancelarSolicitacao(p)" class="btn cancel">
+                  Cancelar
+                </button>
+              </td>
+            </tr>
+            <tr v-if="pedidos.length === 0">
+              <td colspan="5">Nenhum pedido ainda.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Projeto Integrador II — Coleta Lixo © 2025</p>
+    </footer>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          form: { nome: '', endereco: '', tipo: '' },
+          pedidos: [],
+          mensagem: ''
+        }
+      },
+      mounted() {
+        const salvo = localStorage.getItem('pedidos_lixo');
+        if (salvo) this.pedidos = JSON.parse(salvo);
+      },
+      methods: {
+        criarSolicitacao() {
+          const novo = {
+            id: 'R' + Math.floor(Math.random() * 9999),
+            nome: this.form.nome,
+            endereco: this.form.endereco,
+            tipo: this.form.tipo,
+            situacao: 'Aguardando'
+          };
+          this.pedidos.unshift(novo);
+          this.salvarPedidos();
+          this.mensagem = 'Solicitação registrada!';
+          this.form = { nome: '', endereco: '', tipo: '' };
+          setTimeout(() => this.mensagem = '', 2500);
+        },
+        cancelarSolicitacao(pedido) {
+          if (pedido.situacao === 'Aguardando') {
+            pedido.situacao = 'Cancelado';
+            this.mensagem = 'Solicitação cancelada com sucesso.';
+          } else if (pedido.situacao === 'Recebida') {
+            pedido.situacao = 'Cancelamento Solicitado';
+            this.mensagem = 'Cancelamento solicitado — aguardando análise da secretaria.';
+          } else {
+            this.mensagem = 'Não é possível cancelar esta solicitação.';
+          }
+          this.salvarPedidos();
+          setTimeout(() => this.mensagem = '', 2500);
+        },
+        mostrarBotaoCancelar(pedido) {
+          return ['Aguardando', 'Recebida'].includes(pedido.situacao);
+        },
+        salvarPedidos() {
+          localStorage.setItem('pedidos_lixo', JSON.stringify(this.pedidos));
+        },
+        statusClass(s) {
+          if (s === 'Aguardando') return 'status-await';
+          if (s === 'Recebida') return 'status-ok';
+          if (s === 'Cancelado') return 'status-cancel';
+          if (s === 'Cancelamento Solicitado') return 'status-pending';
+          return '';
+        }
+      }
+    }).mount('#app');
+  </script>
 </body>
 </html>
