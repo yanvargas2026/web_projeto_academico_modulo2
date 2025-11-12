@@ -36,7 +36,7 @@ pela Secretaria de Infraestrutura.
 1.  **Clone o repositório**
 
     ``` bash
-    git clone https://github.com/yanvargas2026/web_projeto_academico_modulo2
+    git clone https://github.com/yanvargas2026/web_projeto_academico_modulo2.git
     ```
 
 2.  **Acesse o diretório**
