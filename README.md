@@ -1,2 +1,4 @@
-# web_projeto_academico_modulo2
-Plataforma Web Coleta de lixo eletroeletrônico
+# Coleta Lixo — Projeto Integrador II
+
+Protótipo MVP de uma aplicação web para coleta de lixo eletrônico.
+Desenvolvido em HTML, CSS e Vue.js.
