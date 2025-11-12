@@ -2,7 +2,7 @@
 
 ## Descrição do Projeto
 
-O **Coleta Lixo** é uma aplicação web dinâmica desenvolvida como parte
+O **Plataforma coleta de lixo eletroeletronico** é uma aplicação web dinâmica desenvolvida como parte
 do **Projeto Integrador II**, com o objetivo de facilitar o registro e
 acompanhamento de solicitações de coleta de lixo eletrônico na cidade de
 Corumbá-MS.\
@@ -28,11 +28,6 @@ pela Secretaria de Infraestrutura.
     │
     ├── index.html          # Estrutura principal e lógica Vue.js
     ├── styles.css          # Estilização da aplicação
-    ├── /assets/            # Imagens e ícones do projeto
-    ├── /components/        # Componentes Vue (caso futuros)
-    ├── /pages/             # Páginas adicionais
-    ├── /scripts/           # JS adicionais (caso o projeto cresça)
-    └── README.md           # Documentação do projeto
 
 ------------------------------------------------------------------------
 
@@ -52,9 +47,9 @@ pela Secretaria de Infraestrutura.
 
 3.  **Abra o projeto**
 
-    -   Dê duplo clique em `index.html`, ou\
-    -   Utilize o **Live Server** do VS Code para visualizar no
-        navegador.
+    -   utilize o serviço apache, ex. xamp e inicialize.
+    -   Utilize o o sublime, VS Code ou  note++ para editar.
+    -  de um duplo clique e Visualize em qualquer navegador.
 
 ------------------------------------------------------------------------
 
